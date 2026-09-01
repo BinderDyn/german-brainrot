@@ -1,0 +1,25 @@
+{
+  "profiles": [
+    {
+      "id": "hoarding_bug",
+      "enemyType": "HoarderBugAI",
+      "soundPackFolder": "packs/manuellsen",
+      "enabled": true,
+      "triggerOnVanillaClips": ["*"]
+    },
+    {
+      "id": "tulip_snake",
+      "enemyType": "TulipSnakeAI",
+      "soundPackFolder": "packs/redo",
+      "enabled": true,
+      "triggerOnVanillaClips": ["*"]
+    },
+    {
+      "id": "flower_man",
+      "enemyType": "FlowermanAI",
+      "soundPackFolder": "packs/drache",
+      "enabled": true,
+      "triggerOnVanillaClips": ["*"]
+    }
+  ]
+}

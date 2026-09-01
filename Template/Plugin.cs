@@ -1,21 +1,20 @@
-﻿using BepInEx;
+﻿using System.IO;
+using BepInEx;
 using BepInEx.Logging;
+using BinderDyn.patch;
+using BinderDyn.service;
 using HarmonyLib;
-using YourThunderstoreTeam.patch;
-using YourThunderstoreTeam.service;
 
-namespace YourThunderstoreTeam;
+namespace BinderDyn;
 
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
-    public static Plugin Instance { get; set; }
+    public static Plugin Instance { get; private set; } = null!;
 
     public static ManualLogSource Log => Instance.Logger;
 
     private readonly Harmony _harmony = new(PluginInfo.PLUGIN_GUID);
-
-    public TemplateService Service;
 
     public Plugin()
     {
@@ -24,19 +23,11 @@ public class Plugin : BaseUnityPlugin
 
     private void Awake()
     {
-        Service = new TemplateService();
-
-        Log.LogInfo($"Applying patches...");
-        ApplyPluginPatch();
-        Log.LogInfo($"Patches applied");
-    }
-
-    /// <summary>
-    /// Applies the patch to the game.
-    /// </summary>
-    private void ApplyPluginPatch()
-    {
-        _harmony.PatchAll(typeof(ShipLightsPatch));
-        _harmony.PatchAll(typeof(PlayerControllerBPatch));
+        NetcodeRpcInitializer.InitializeAssembly();
+        SoundPackService.Load(Path.GetDirectoryName(Info.Location)!);
+        Log.LogInfo("Applying patches...");
+        _harmony.PatchAll(typeof(EnemyPrefabPatch));
+        _harmony.PatchAll(typeof(CreatureSoundPatch));
+        Log.LogInfo("GermanBrainrot loaded.");
     }
 }

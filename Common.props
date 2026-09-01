@@ -3,7 +3,7 @@
     <PropertyGroup>
         <!-- Name of the team on Thunderstore -->
         <!-- https://thunderstore.io/settings/teams -->
-        <RootNamespace>YourThunderstoreTeam</RootNamespace>
+        <RootNamespace>BinderDyn</RootNamespace>
         <!-- The plugin will be built in the bin directory -->
         <OutputPath>bin</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -48,6 +48,7 @@
     <ItemGroup Condition="$(CI) != 'true'">
         <!-- List of game assembly to include as reference -->
         <DllNames Include="Assembly-CSharp" Publicize="true" />
+        <DllNames Include="Newtonsoft.Json" />
         <DllNames Include="Unity.Netcode.Runtime" />
 
         <Reference Include="@(DllNames)" HintPath="$(AssemblyGameDir)%(Identity).dll"/>

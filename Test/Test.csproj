@@ -5,10 +5,11 @@
 
     <PropertyGroup>
         <!-- We need an engine to run test, netstandard doesn't have one -->
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <MinVerSkip>true</MinVerSkip>
     </PropertyGroup>
 
     <ItemGroup>
