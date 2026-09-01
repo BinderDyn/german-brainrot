@@ -39,12 +39,6 @@ public static class CreatureSoundPatch
             return true;
         }
 
-        var clipPath = SoundPackService.PickRandomClip(profile);
-        if (clipPath == null)
-        {
-            return true;
-        }
-
         var stream = enemy.GetComponent<CreatureAudioStream>();
         if (stream == null)
         {
@@ -55,6 +49,12 @@ public static class CreatureSoundPatch
         if (stream.IsStreaming)
         {
             return ModConfig.PlayAlongsideVanilla.Value;
+        }
+
+        var clipPath = SoundPackService.PickRandomClip(profile, stream.LastPlayedClipPath);
+        if (clipPath == null)
+        {
+            return true;
         }
 
         stream.StreamOpusFromFile(clipPath);

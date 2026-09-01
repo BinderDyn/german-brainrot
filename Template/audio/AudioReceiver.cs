@@ -1,6 +1,6 @@
 using System;
+using System.Collections;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BinderDyn.audio;
@@ -31,6 +31,10 @@ public sealed class AudioReceiver : IDisposable
         _audioSource.clip = _clip;
     }
 
+    public bool HasStartedPlayback => _isPlaying;
+
+    public float ClipDurationSeconds => (float)_totalSamples / OpusConstants.SampleRate;
+
     public void ReceivePacket(OpusPacket packet)
     {
         if (_disposed || packet.Samples == null || packet.SampleCount == 0)
@@ -50,13 +54,40 @@ public sealed class AudioReceiver : IDisposable
 
     private void TryStartPlayback()
     {
-        if (_isPlaying || _bufferedMs < OpusConstants.MinimumBufferedAudioMs)
+        if (_isPlaying || _disposed)
+        {
+            return;
+        }
+
+        var allSamplesReceived = _receivedSamples >= _totalSamples;
+        if (_bufferedMs < OpusConstants.MinimumBufferedAudioMs && !allSamplesReceived)
         {
             return;
         }
 
         _isPlaying = true;
         _audioSource.Play();
+    }
+
+    public IEnumerator WaitForPlaybackComplete()
+    {
+        const float startTimeoutSeconds = 2f;
+        var waited = 0f;
+        while (!_isPlaying && !_disposed && waited < startTimeoutSeconds)
+        {
+            waited += Time.deltaTime;
+            yield return null;
+        }
+
+        if (_disposed || !_isPlaying)
+        {
+            yield break;
+        }
+
+        while (_audioSource.isPlaying && !_disposed)
+        {
+            yield return null;
+        }
     }
 
     public void Dispose()

@@ -8,8 +8,8 @@
       "triggerOnVanillaClips": ["*"]
     },
     {
-      "id": "tulip_snake",
-      "enemyType": "TulipSnakeAI",
+      "id": "flower_snake",
+      "enemyType": "FlowerSnakeAI",
       "soundPackFolder": "packs/redo",
       "enabled": true,
       "triggerOnVanillaClips": ["*"]

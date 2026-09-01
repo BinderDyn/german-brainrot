@@ -124,15 +124,49 @@ public static class SoundPackService
         ClipsByProfileId.TryGetValue(profile.Id, out var clips) &&
         clips.Count > 0;
 
-    public static string? PickRandomClip(CreatureProfile profile)
+    public static string? PickRandomClip(CreatureProfile profile, string? excludePath = null)
     {
         if (!ClipsByProfileId.TryGetValue(profile.Id, out var clips) || clips.Count == 0)
         {
             return null;
         }
 
-        var index = Random.Next(clips.Count);
-        return clips[index];
+        return PickRandomClipFromList(clips, excludePath, Random);
+    }
+
+    public static string? PickRandomClipFromList(
+        IReadOnlyList<string> clips,
+        string? excludePath,
+        System.Random random)
+    {
+        if (clips.Count == 0)
+        {
+            return null;
+        }
+
+        if (clips.Count == 1)
+        {
+            return clips[0];
+        }
+
+        List<string> candidates;
+        if (string.IsNullOrEmpty(excludePath))
+        {
+            candidates = clips.ToList();
+        }
+        else
+        {
+            candidates = clips
+                .Where(clip => !clip.Equals(excludePath, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+
+        if (candidates.Count == 0)
+        {
+            candidates = clips.ToList();
+        }
+
+        return candidates[random.Next(candidates.Count)];
     }
 
     public static bool ShouldTrigger(CreatureProfile profile, string? clipName) =>

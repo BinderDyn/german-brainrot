@@ -11,7 +11,7 @@ namespace BinderDyn.audio;
 
 public class CreatureAudioStream : NetworkBehaviour
 {
-    private const float StreamCooldownSeconds = 2f;
+    private const float StreamCooldownSeconds = 5f;
 
     private AudioSender? _audioSender;
     private AudioReceiver? _audioReceiver;
@@ -24,6 +24,8 @@ public class CreatureAudioStream : NetworkBehaviour
     public AudioSource StreamAudioSource { get; private set; } = null!;
 
     public bool IsStreaming => _streamCoroutine != null;
+
+    public string? LastPlayedClipPath { get; private set; }
 
     private void Awake()
     {
@@ -92,6 +94,7 @@ public class CreatureAudioStream : NetworkBehaviour
         }
 
         _lastStreamStartTime = Time.time;
+        LastPlayedClipPath = filePath;
         _streamCoroutine = StartCoroutine(StreamOpusFromFileRoutine(filePath));
     }
 
@@ -178,6 +181,11 @@ public class CreatureAudioStream : NetworkBehaviour
         if (streamError != null)
         {
             Plugin.Log.LogError($"Error streaming audio: {streamError}");
+        }
+
+        if (_audioReceiver != null)
+        {
+            yield return _audioReceiver.WaitForPlaybackComplete();
         }
 
         CleanupStreamResources();
