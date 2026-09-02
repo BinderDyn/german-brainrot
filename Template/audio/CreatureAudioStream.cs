@@ -228,7 +228,7 @@ public class CreatureAudioStream : NetworkBehaviour
         _audioReceiver = new AudioReceiver(StreamAudioSource, totalSamples, _streamCancellation!.Token);
     }
 
-    [ClientRpc(RequireOwnership = false)]
+    [ClientRpc]
     private void InitializeAudioReceiverClientRpc(int totalSamples)
     {
         if (IsHost)
@@ -252,7 +252,7 @@ public class CreatureAudioStream : NetworkBehaviour
         InitializeAudioReceiverClientRpc(totalSamples);
     }
 
-    [ClientRpc(RequireOwnership = false)]
+    [ClientRpc]
     private void SendPacketClientRpc(OpusPacket packet)
     {
         if (IsHost)
