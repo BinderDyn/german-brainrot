@@ -16,8 +16,7 @@
         <StartGame>false</StartGame>
 
         <MinVerTagPrefix>v</MinVerTagPrefix>
-        <MinVerSkip>true</MinVerSkip>
-        <Version>1.0.0</Version>
+        <MinVerSkip>false</MinVerSkip>
     </PropertyGroup>
 
     <ItemGroup>
