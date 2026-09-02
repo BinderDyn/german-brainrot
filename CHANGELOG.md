@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2026-09-02)
+
+
+### Features
+
+* Bump version ([5560d47](https://github.com/BinderDyn/german-brainrot/commit/5560d4737795f431403b2605ef8ff417e894e730))
+
 ## [1.0.2](https://github.com/Distractic/LethalCompanyTemplate/compare/v1.0.1...v1.0.2) (2024-01-21)
 
 
