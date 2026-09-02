@@ -74,9 +74,9 @@ target = "BepInEx/plugins/GermanBrainrot/config/creature-profiles.json"
 
 [[build.copy]]
 
-source = "Template/audio/packs/"
+source = "Template/audio/packs"
 
-target = "BepInEx/plugins/GermanBrainrot/audio/packs/"
+target = "BepInEx/plugins/GermanBrainrot/audio/packs"
 
 
 
