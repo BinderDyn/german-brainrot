@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/BinderDyn/german-brainrot/compare/v1.0.2...v1.0.3) (2026-09-02)
+
+
+### Bug Fixes
+
+* Fix versioning ([ac3c617](https://github.com/BinderDyn/german-brainrot/commit/ac3c6175c6d807fe0ed1fb33f232204c1e22f045))
+
 ## [1.0.2](https://github.com/BinderDyn/german-brainrot/compare/v1.0.1...v1.0.2) (2026-09-02)
 
 
