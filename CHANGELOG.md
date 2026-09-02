@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/BinderDyn/german-brainrot/compare/v1.0.0...v1.0.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* Change categories and icon ([aa98053](https://github.com/BinderDyn/german-brainrot/commit/aa98053b356053a054e50767468a271b73c7357e))
+
 ## 1.0.0 (2026-09-02)
 
 
