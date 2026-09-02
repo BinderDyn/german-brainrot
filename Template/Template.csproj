@@ -72,7 +72,10 @@
         <Exec Command='for /L %%i in (1,1,$(NumberOfClients)) do (start "" "$(GameExePath)" &amp; if %%i lss $(NumberOfClients) (ping 127.0.0.1 -n $(PingDelay) > nul))'/>
     </Target>
 
-    <Target Condition="'$(BuildThunderstorePackage)' == 'true'" Name="ThunderstoreBuild" AfterTargets="PostBuildEvent" DependsOnTargets="NetcodePatch">
-        <Exec Command="tcli build --config-path $(SolutionDir)thunderstore.toml --package-version $(Version)"/>
+    <Target Condition="'$(BuildThunderstorePackage)' == 'true'" Name="ThunderstoreBuild" AfterTargets="PostBuildEvent" DependsOnTargets="NetcodePatch;CopyPluginDependencies">
+        <PropertyGroup>
+            <_RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../'))</_RepoRoot>
+        </PropertyGroup>
+        <Exec WorkingDirectory="$(_RepoRoot)" Command="tcli build --config-path &quot;$(_RepoRoot)thunderstore.toml&quot; --package-version $(Version)"/>
     </Target>
 </Project>
