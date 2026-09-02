@@ -15,8 +15,8 @@
       "triggerOnVanillaClips": ["*"]
     },
     {
-      "id": "flower_man",
-      "enemyType": "FlowermanAI",
+      "id": "crawler",
+      "enemyType": "CrawlerAI",
       "soundPackFolder": "packs/drache",
       "enabled": true,
       "triggerOnVanillaClips": ["*"]
