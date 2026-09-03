@@ -7,7 +7,6 @@
         <AssemblyName>GermanBrainrot</AssemblyName>
         <Description>German meme streamer sounds synced to creature audio</Description>
 
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
 
         <NumberOfClients>2</NumberOfClients>
@@ -32,18 +31,6 @@
         <None Include="config\creature-profiles.json" CopyToOutputDirectory="PreserveNewest"/>
         <None Include="audio\packs\**\*" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
-
-    <Target Name="NetcodePatch" AfterTargets="PostBuildEvent" Condition="'$(SkipNetcodePatch)' != 'true'">
-        <PropertyGroup>
-            <NetcodePatchExe Condition="Exists('$(USERPROFILE)\.dotnet\tools\netcode-patch.exe')">$(USERPROFILE)\.dotnet\tools\netcode-patch.exe</NetcodePatchExe>
-            <NetcodePatchExe Condition="'$(NetcodePatchExe)' == ''">netcode-patch</NetcodePatchExe>
-            <NetcodePatcherDepsListFile>$(MSBuildProjectDirectory)\$(IntermediateOutputPath)ncp-deps.list</NetcodePatcherDepsListFile>
-            <NetcodePatchCommand Condition="'$(CI)' == 'true'">&quot;$(NetcodePatchExe)&quot; &quot;$(TargetPath)&quot; --dependency-file &quot;$(NetcodePatcherDepsListFile)&quot;</NetcodePatchCommand>
-            <NetcodePatchCommand Condition="'$(CI)' != 'true'">&quot;$(NetcodePatchExe)&quot; &quot;$(TargetPath)&quot; &quot;$(AssemblyGameDir)Unity.Netcode.Runtime.dll&quot; &quot;$(IntermediateOutputPath)publicized\Assembly-CSharp.dll&quot;</NetcodePatchCommand>
-        </PropertyGroup>
-        <WriteLinesToFile Condition="'$(CI)' == 'true'" File="$(NetcodePatcherDepsListFile)" Lines="@(ReferencePathWithRefAssemblies)" Overwrite="true"/>
-        <Exec WorkingDirectory="$(MSBuildProjectDirectory)" Command="$(NetcodePatchCommand)"/>
-    </Target>
 
     <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
         <ItemGroup>
@@ -71,7 +58,7 @@
         <Exec Command='for /L %%i in (1,1,$(NumberOfClients)) do (start "" "$(GameExePath)" &amp; if %%i lss $(NumberOfClients) (ping 127.0.0.1 -n $(PingDelay) > nul))'/>
     </Target>
 
-    <Target Condition="'$(BuildThunderstorePackage)' == 'true'" Name="ThunderstoreBuild" AfterTargets="PostBuildEvent" DependsOnTargets="NetcodePatch;CopyPluginDependencies">
+    <Target Condition="'$(BuildThunderstorePackage)' == 'true'" Name="ThunderstoreBuild" AfterTargets="PostBuildEvent" DependsOnTargets="CopyPluginDependencies">
         <PropertyGroup>
             <_RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../'))</_RepoRoot>
         </PropertyGroup>

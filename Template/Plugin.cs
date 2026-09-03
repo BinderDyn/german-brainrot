@@ -23,10 +23,8 @@ public class Plugin : BaseUnityPlugin
 
     private void Awake()
     {
-        NetcodeRpcInitializer.InitializeAssembly();
         SoundPackService.Load(Path.GetDirectoryName(Info.Location)!);
         Log.LogInfo("Applying patches...");
-        _harmony.PatchAll(typeof(EnemyPrefabPatch));
         _harmony.PatchAll(typeof(CreatureSoundPatch));
         Log.LogInfo("GermanBrainrot loaded.");
     }

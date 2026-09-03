@@ -9,7 +9,7 @@
     },
     {
       "id": "flower_snake",
-      "enemyType": "FlowerSnakeAI",
+      "enemyType": "FlowerSnakeEnemy",
       "soundPackFolder": "packs/redo",
       "enabled": true,
       "triggerOnVanillaClips": ["*"]
@@ -18,6 +18,13 @@
       "id": "crawler",
       "enemyType": "CrawlerAI",
       "soundPackFolder": "packs/drache",
+      "enabled": true,
+      "triggerOnVanillaClips": ["*"]
+    },
+    {
+      "id": "cave_dweller",
+      "enemyType": "CaveDwellerAI",
+      "soundPackFolder": "packs/tim",
       "enabled": true,
       "triggerOnVanillaClips": ["*"]
     }

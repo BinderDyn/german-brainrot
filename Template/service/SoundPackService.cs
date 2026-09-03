@@ -20,6 +20,7 @@ public static class SoundPackService
     private static readonly Dictionary<string, CreatureProfile> ProfilesByEnemyType = new(StringComparer.Ordinal);
     private static readonly Dictionary<string, IReadOnlyList<string>> ClipsByProfileId = new();
     private static readonly System.Random Random = new();
+    private static readonly System.Collections.Generic.HashSet<string> _loggedOnce = new(StringComparer.Ordinal);
 
     public static string PluginDirectory { get; private set; } = string.Empty;
     public static string AudioRootDirectory { get; private set; } = string.Empty;
@@ -81,7 +82,7 @@ public static class SoundPackService
         var folderPath = Path.Combine(AudioRootDirectory, profile.SoundPackFolder.Replace('/', Path.DirectorySeparatorChar));
         if (!Directory.Exists(folderPath))
         {
-            Plugin.Log.LogWarning($"Sound pack folder missing for {profile.Id}: {folderPath}");
+            LogOnce($"missing_folder_{profile.Id}", $"Sound pack folder missing for {profile.Id}: {folderPath}");
             return Array.Empty<string>();
         }
 
@@ -98,7 +99,7 @@ public static class SoundPackService
 
         if (clips.Count == 0)
         {
-            Plugin.Log.LogWarning($"No .opus or .wav clips found for {profile.Id} in {folderPath}");
+            LogOnce($"empty_pack_{profile.Id}", $"No .opus or .wav clips found for {profile.Id} in {folderPath}");
         }
         else
         {
@@ -171,4 +172,23 @@ public static class SoundPackService
 
     public static bool ShouldTrigger(CreatureProfile profile, string? clipName) =>
         IsProfileActive(profile) && profile.ShouldTriggerForClip(clipName);
+
+    private static void LogOnce(string key, string message)
+    {
+        if (_loggedOnce.Add(key))
+        {
+            Plugin.Log.LogWarning(message);
+        }
+    }
+
+    /// <summary>
+    /// Given a profile and a bare clip filename (e.g. "wallah.wav"), returns the full local
+    /// path if the file exists in this client's pack folder, or null if it is not present.
+    /// </summary>
+    public static string? ResolveClipPath(CreatureProfile profile, string clipName)
+    {
+        var folderPath = Path.Combine(AudioRootDirectory, profile.SoundPackFolder.Replace('/', Path.DirectorySeparatorChar));
+        var fullPath = Path.Combine(folderPath, clipName);
+        return File.Exists(fullPath) ? fullPath : null;
+    }
 }

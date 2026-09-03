@@ -8,6 +8,9 @@ namespace BinderDyn.audio;
 
 public sealed class OpusFileReader : IDisposable
 {
+    private const int SampleRate = 48000;
+    private const int Channels = 1;
+
     private readonly List<float> _samples = new();
     private bool _disposed;
 
@@ -37,7 +40,7 @@ public sealed class OpusFileReader : IDisposable
     private void LoadOpus(string filePath)
     {
         using var fileStream = File.OpenRead(filePath);
-        var decoder = OpusCodecFactory.CreateDecoder(OpusConstants.SampleRate, OpusConstants.Channels);
+        var decoder = OpusCodecFactory.CreateDecoder(SampleRate, Channels);
         var oggStream = new OpusOggReadStream(decoder, fileStream);
 
         while (oggStream.HasNextPacket)
@@ -74,7 +77,7 @@ public sealed class OpusFileReader : IDisposable
         }
 
         short channels = 1;
-        var sampleRate = OpusConstants.SampleRate;
+        var sampleRate = SampleRate;
         short bitsPerSample = 16;
         var dataOffset = 0L;
         var dataSize = 0;
@@ -133,7 +136,7 @@ public sealed class OpusFileReader : IDisposable
             _samples.Add(sample / 32768f);
         }
 
-        if (sampleRate != OpusConstants.SampleRate && _samples.Count > 0)
+        if (sampleRate != SampleRate && _samples.Count > 0)
         {
             ResampleToTargetRate(sampleRate);
         }
@@ -141,13 +144,13 @@ public sealed class OpusFileReader : IDisposable
 
     private void ResampleToTargetRate(int sourceRate)
     {
-        if (sourceRate == OpusConstants.SampleRate)
+        if (sourceRate == SampleRate)
         {
             return;
         }
 
         var resampled = new List<float>();
-        var ratio = (double)sourceRate / OpusConstants.SampleRate;
+        var ratio = (double)sourceRate / SampleRate;
         var targetCount = (int)(_samples.Count / ratio);
 
         for (var i = 0; i < targetCount; i++)

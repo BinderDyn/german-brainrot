@@ -2,7 +2,6 @@ using BinderDyn.audio;
 using BinderDyn.config;
 using BinderDyn.service;
 using HarmonyLib;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace BinderDyn.patch;
@@ -22,7 +21,7 @@ public static class CreatureSoundPatch
 
     private static bool HandleCreatureSound(AudioSource audioSource, AudioClip? clip)
     {
-        if (clip == null || NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost)
+        if (clip == null)
         {
             return true;
         }
@@ -39,25 +38,22 @@ public static class CreatureSoundPatch
             return true;
         }
 
-        var stream = enemy.GetComponent<CreatureAudioStream>();
-        if (stream == null)
-        {
-            Plugin.Log.LogWarning($"CreatureAudioStream missing on {enemy.GetType().Name}");
-            return ModConfig.PlayAlongsideVanilla.Value;
-        }
+        var player = enemy.GetComponent<LocalAudioPlayer>()
+                     ?? enemy.gameObject.AddComponent<LocalAudioPlayer>();
 
-        if (stream.IsStreaming)
+        if (player.IsPlaying)
         {
             return ModConfig.PlayAlongsideVanilla.Value;
         }
 
-        var clipPath = SoundPackService.PickRandomClip(profile, stream.LastPlayedClipPath);
+        var clipPath = SoundPackService.PickRandomClip(profile, player.LastPlayedClipPath);
         if (clipPath == null)
         {
             return true;
         }
 
-        stream.StreamOpusFromFile(clipPath);
+        player.LastPlayedClipPath = clipPath;
+        player.PlayClip(clipPath);
         return ModConfig.PlayAlongsideVanilla.Value;
     }
 }
