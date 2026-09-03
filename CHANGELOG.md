@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/BinderDyn/german-brainrot/compare/v1.0.3...v1.1.0) (2026-09-03)
+
+
+### Features
+
+* remove netcode and simplify, also add cave dweller ([63b9f5b](https://github.com/BinderDyn/german-brainrot/commit/63b9f5b5ed9758c3a858f58c36479065acbc07de))
+
 ## [1.0.3](https://github.com/BinderDyn/german-brainrot/compare/v1.0.2...v1.0.3) (2026-09-02)
 
 
